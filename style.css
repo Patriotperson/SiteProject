@@ -42,3 +42,9 @@ nav a.active {
 section {
     margin-bottom: 40px;
 }
+.profile-photo {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 50%;
+}
