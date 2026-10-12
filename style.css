@@ -1,3 +1,17 @@
+:root {
+  --parchment: #f4ecda;
+  --parchment-2: #ece0c4;
+  --ink: #163041;
+  --ink-soft: #3a556b;
+  --sea: #155e75;
+  --sea-deep: #0e3a4d;
+  --rope: #c9b088;
+  --gold: #b78f2e;
+  --signal-red: #b23a2e;
+  --card: #faf5e8;
+  --line: rgba(22, 48, 65, 0.18);
+}
+
 body {
   font-family: "Inter", ui-sans-serif, system-ui, -apple-system, Arial, sans-serif;
   max-width: 960px;
