@@ -37,34 +37,77 @@ header {
     text-align: center;
     margin-bottom: 40px;
 }
-
+/* nav = chart waypoints */
 nav {
-    text-align: center;
-    margin-bottom: 30px;
+  text-align: center;
+  margin-bottom: 28px;
+  position: sticky;
+  top: 10px;
+  z-index: 20;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
 }
 
 nav a {
-    display: inline-block;
-    margin: 0 8px;
-    padding: 10px 18px;
-    text-decoration: none;
-    color: #333;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    background: white;
-    transition: all 0.2s ease;
-}
-nav a:hover {
-    background-color: #0d6efd;
-    color: white;
-    border-color: #0d6efd;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 2px;
+  padding: 10px 18px;
+  text-decoration: none;
+  color: var(--ink);
+  border: 1px solid var(--ink);
+  border-radius: 999px;
+  background: var(--card);
+  font-size: 0.92rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  transition: transform 0.22s ease, background 0.22s ease, color 0.22s ease, box-shadow 0.22s ease;
+  position: relative;
+  box-shadow: 2px 2px 0 rgba(22,48,65,0.9);
 }
 
-nav a.active {
-    background: #0d6efd;
-    color: white;
-    border-color: #0d6efd;
+nav a::before {
+  content: "✧";
+  font-size: 0.85em;
+  color: var(--gold);
+  transition: transform 0.3s ease;
 }
+
+nav a:hover {
+  background-color: var(--sea-deep);
+  color: #fff;
+  border-color: var(--sea-deep);
+  transform: translateY(-2px) rotate(-0.5deg);
+  box-shadow: 3px 5px 0 rgba(22,48,65,0.9);
+}
+nav a:hover::before { transform: rotate(90deg) scale(1.25); color: #fff; }
+
+nav a.active {
+  background: var(--ink);
+  color: var(--parchment);
+  border-color: var(--ink);
+}
+
+/* voyage hero injected by JS */
+.voyage-hero {
+  position: relative;
+  border: 1px solid var(--ink);
+  border-radius: 6px;
+  background:
+    linear-gradient(180deg, #fdf7e6 0%, #f3e8c8 30%, #cfe0d8 62%, #a9c9c2 78%, #3d7d90 100%);
+  overflow: hidden;
+  margin-bottom: 28px;
+  box-shadow: 6px 6px 0 rgba(22,48,65,0.9);
+  min-height: 430px;
+  display: block;
+  touch-action: pan-y;
+  cursor: crosshair;
+}
+
 /* fixed chart sea canvas */
 #chart-sea {
   position: fixed;
