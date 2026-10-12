@@ -107,6 +107,28 @@ nav a.active {
   touch-action: pan-y;
   cursor: crosshair;
 }
+/* rhumb lines overlay */
+.voyage-hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    repeating-conic-gradient(from 0deg at 72% 30%, rgba(22,48,65,0.06) 0 1deg, transparent 1deg 12deg);
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* sounding numbers floating */
+.soundings {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  font-family: Georgia, serif;
+  font-style: italic;
+  color: rgba(22,48,65,0.16);
+  font-size: 13px;
+}
 
 /* fixed chart sea canvas */
 #chart-sea {
