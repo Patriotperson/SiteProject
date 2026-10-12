@@ -1,9 +1,22 @@
 body {
-    font-family: Arial, sans-serif;
-    max-width: 900px;
-    margin: auto;
-    padding: 20px;
-    line-height: 1.6;
+  font-family: "Inter", ui-sans-serif, system-ui, -apple-system, Arial, sans-serif;
+  max-width: 960px;
+  margin: auto;
+  padding: 20px 20px 0;
+  line-height: 1.65;
+  color: var(--ink);
+  background-color: var(--parchment);
+  background-image:
+    linear-gradient(var(--line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--line) 1px, transparent 1px),
+    radial-gradient(ellipse at 20% -10%, rgba(181,143,46,0.22), transparent 55%),
+    radial-gradient(ellipse at 95% 10%, rgba(21,94,117,0.16), transparent 50%),
+    repeating-linear-gradient(0deg, transparent 0 34px, rgba(22,48,65,0.045) 34px 35px);
+  background-size: 44px 44px, 44px 44px, 100% 100%, 100% 100%, 100% 100%;
+  min-height: 100vh;
+  position: relative;
+  overflow-x: hidden;
+
 }
 
 header {
