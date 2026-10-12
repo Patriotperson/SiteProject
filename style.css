@@ -38,6 +38,26 @@ nav a.active {
     color: white;
     border-color: #0d6efd;
 }
+/* fixed chart sea canvas */
+#chart-sea {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -2;
+  opacity: 0.9;
+  pointer-events: none;
+}
+
+.chart-vignette {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse at center, transparent 55%, rgba(22,48,65,0.14) 100%),
+    linear-gradient(transparent 90%, rgba(14,58,77,0.18));
+}
 
 section {
     margin-bottom: 40px;
