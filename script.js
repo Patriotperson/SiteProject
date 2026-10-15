@@ -1,5 +1,5 @@
 console.log("Website loaded.");
-(function () 
+(function () {
  const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 /* 1. Ink-draw header letters */
