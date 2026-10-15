@@ -35,6 +35,8 @@ console.log("Website loaded.");
     H = canvas.height = window.innerHeight;
   }
   resize();
+  window.addEventListener("resize", resize);
+
 // scattered depth soundings like old charts
   const soundings = Array.from({ length: 26 }, () => ({
     x: Math.random(), y: Math.random(),
@@ -65,5 +67,14 @@ console.log("Website loaded.");
     if (!reduced) requestAnimationFrame(drawSea);
   }
   drawSea();
-  window.addEventListener("resize", resize);
+
+ /* 6. Tide footer */
+  if (!document.querySelector(".tide-footer")) {
+    const f = document.createElement("footer");
+    f.className = "tide-footer";
+    f.innerHTML = `<div class="tide-line"></div><div>⚓ Fair winds & following seas — <strong>David Pollard</strong> · Sea Scout Boatswain · <span id="tide-year"></span></div>`;
+    document.body.appendChild(f);
+    const yEl = f.querySelector("#tide-year");
+    if (yEl) yEl.textContent = new Date().getFullYear();
+  }
 })();
