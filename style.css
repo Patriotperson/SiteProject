@@ -1,250 +1,734 @@
+
+/* =========================================================
+   DAVID POLLARD — NAUTICAL PERSONAL WEBSITE
+   Designed to work with the chart-sea JavaScript:
+   - Ink-drawn header lettering
+   - Animated chart waves
+   - Depth soundings
+   - Tide footer
+   - Optional scroll reveals and header parallax
+   ========================================================= */
+
+
+/* ---------- 1. COLORS AND GLOBAL SETTINGS ---------- */
+
 :root {
-  --parchment: #f4ecda;
-  --parchment-2: #ece0c4;
-  --ink: #163041;
-  --ink-soft: #3a556b;
-  --sea: #155e75;
-  --sea-deep: #0e3a4d;
-  --rope: #c9b088;
-  --gold: #b78f2e;
-  --signal-red: #b23a2e;
-  --card: #faf5e8;
-  --line: rgba(22, 48, 65, 0.18);
+    --ink: #163041;
+    --ink-light: #31566a;
+    --sea: #155e75;
+    --sea-light: #4b91a6;
+    --sea-pale: #d8e8e8;
+    --parchment: #f4efe3;
+    --parchment-light: #fbf8f0;
+    --rope: #b99a64;
+    --gold: #c6a56b;
+    --border: rgba(22, 48, 65, 0.22);
+    --shadow: rgba(17, 39, 52, 0.12);
+    --radius: 12px;
 }
 
-* { box-sizing: border-box; }
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
 
 html {
-  scroll-behavior: smooth;
+    scroll-behavior: smooth;
+    scroll-padding-top: 90px;
 }
 
 body {
-  font-family: "Inter", ui-sans-serif, system-ui, -apple-system, Arial, sans-serif;
-  max-width: 960px;
-  margin: auto;
-  padding: 20px 20px 0;
-  line-height: 1.65;
-  color: var(--ink);
-  background-color: var(--parchment);
-  background-image:
-    linear-gradient(var(--line) 1px, transparent 1px),
-    linear-gradient(90deg, var(--line) 1px, transparent 1px),
-    radial-gradient(ellipse at 20% -10%, rgba(181,143,46,0.22), transparent 55%),
-    radial-gradient(ellipse at 95% 10%, rgba(21,94,117,0.16), transparent 50%),
-    repeating-linear-gradient(0deg, transparent 0 34px, rgba(22,48,65,0.045) 34px 35px);
-  background-size: 44px 44px, 44px 44px, 100% 100%, 100% 100%, 100% 100%;
-  min-height: 100vh;
-  position: relative;
-  overflow-x: hidden;
+    position: relative;
+    isolation: isolate;
+
+    max-width: 960px;
+    min-height: 100vh;
+    margin: 0 auto;
+    padding: 28px 24px 40px;
+
+    color: var(--ink);
+    background-color: var(--parchment);
+
+    background-image:
+        linear-gradient(
+            rgba(21, 94, 117, 0.035) 1px,
+            transparent 1px
+        ),
+        linear-gradient(
+            90deg,
+            rgba(21, 94, 117, 0.035) 1px,
+            transparent 1px
+        ),
+        radial-gradient(
+            ellipse at 50% 0%,
+            rgba(75, 145, 166, 0.12),
+            transparent 70%
+        );
+
+    background-size:
+        24px 24px,
+        24px 24px,
+        100% 700px;
+
+    background-attachment: fixed;
+    overflow-x: hidden;
+
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 16px;
+    line-height: 1.7;
 }
 
-header {
-    text-align: center;
-    margin-bottom: 40px;
-}
-/* nav = chart waypoints */
-nav {
-  text-align: center;
-  margin-bottom: 28px;
-  position: sticky;
-  top: 10px;
-  z-index: 20;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  justify-content: center;
+img {
+    max-width: 100%;
+    height: auto;
 }
 
-nav a {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  margin: 0 2px;
-  padding: 10px 18px;
-  text-decoration: none;
-  color: var(--ink);
-  border: 1px solid var(--ink);
-  border-radius: 999px;
-  background: var(--card);
-  font-size: 0.92rem;
-  font-weight: 600;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  transition: transform 0.22s ease, background 0.22s ease, color 0.22s ease, box-shadow 0.22s ease;
-  position: relative;
-  box-shadow: 2px 2px 0 rgba(22,48,65,0.9);
+a {
+    color: var(--sea);
+    text-decoration-thickness: 1px;
+    text-underline-offset: 3px;
 }
 
-nav a::before {
-  content: "✧";
-  font-size: 0.85em;
-  color: var(--gold);
-  transition: transform 0.3s ease;
+a:hover {
+    color: var(--ink);
 }
 
-nav a:hover {
-  background-color: var(--sea-deep);
-  color: #fff;
-  border-color: var(--sea-deep);
-  transform: translateY(-2px) rotate(-0.5deg);
-  box-shadow: 3px 5px 0 rgba(22,48,65,0.9);
-}
-nav a:hover::before { transform: rotate(90deg) scale(1.25); color: #fff; }
-
-nav a.active {
-  background: var(--ink);
-  color: var(--parchment);
-  border-color: var(--ink);
+button,
+input,
+textarea,
+select {
+    font: inherit;
 }
 
-/* voyage hero injected by JS */
-.voyage-hero {
-  position: relative;
-  border: 1px solid var(--ink);
-  border-radius: 6px;
-  background:
-    linear-gradient(180deg, #fdf7e6 0%, #f3e8c8 30%, #cfe0d8 62%, #a9c9c2 78%, #3d7d90 100%);
-  overflow: hidden;
-  margin-bottom: 28px;
-  box-shadow: 6px 6px 0 rgba(22,48,65,0.9);
-  min-height: 430px;
-  display: block;
-  touch-action: pan-y;
-  cursor: crosshair;
-  }
-
-.voyage-hero .hero-copy {
-  position: absolute;
-  left: 22px;
-  top: 20px;
-  z-index: 4;
-  max-width: 40ch;
-  pointer-events: none;
+::selection {
+    color: var(--parchment-light);
+    background: var(--sea);
 }
 
-.voyage-hero .hero-kicker {
-  display: inline-block;
-  font-size: 0.72rem;
-  font-weight: 800;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-  background: var(--ink);
-  color: var(--parchment);
-  padding: 5px 10px;
-  border-radius: 999px;
-  margin-bottom: 10px;
-}
 
-.voyage-hero h2 {
-  font-family: "Cormorant Garamond", Georgia, serif;
-  font-size: clamp(1.9rem, 4vw, 2.7rem);
-  line-height: 0.95;
-  margin: 0 0 8px;
-}
+/* ---------- 2. ANIMATED CHART BACKGROUND ---------- */
 
-.voyage-hero p {
-  margin: 0;
-  font-size: 0.95rem;
-  color: #234252;
-  font-style: italic;
-  font-family: Georgia, serif;
-}
+/*
+   The JavaScript creates #chart-sea and .chart-vignette.
+   Keep these behind the content but above the body background.
+*/
 
-/* rhumb lines overlay */
-.voyage-hero::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background:
-    repeating-conic-gradient(from 0deg at 72% 30%, rgba(22,48,65,0.06) 0 1deg, transparent 1deg 12deg);
-  pointer-events: none;
-  z-index: 2;
-}
-
-/* sounding numbers floating */
-.soundings {
-  position: fixed;
-  inset: 0;
-  z-index: -1;
-  pointer-events: none;
-  font-family: Georgia, serif;
-  font-style: italic;
-  color: rgba(22,48,65,0.16);
-  font-size: 13px;
-  
-}
-@media (max-width: 640px) {
-  body { padding: 14px 14px 0; }
-  header { padding: 24px 16px 22px; }
-  .voyage-hero .hero-copy { left: 14px; right: 14px; top: 14px; max-width: none; }
-  .voyage-hero .hero-copy p { display: none; }
-  .sim-hud { left: 14px; right: 14px; top: auto; bottom: 12px; min-width: 0; }
-  nav { top: 6px; }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-  }
-  html { scroll-behavior: auto; }
-  #chart-sea { display: none !important; }
-  [data-reveal] { opacity: 1; transform: none; }
-  .header-text h1 .ink-letter { opacity: 1; transform: none; }
-}
-
-/* fixed chart sea canvas */
 #chart-sea {
-  position: fixed;
-  inset: 0;
-  width: 100vw;
-  height: 100vh;
-  z-index: -2;
-  opacity: 0.9;
-  pointer-events: none;
+    position: fixed;
+    inset: 0;
+
+    display: block;
+    width: 100vw;
+    height: 100vh;
+
+    z-index: -2;
+    opacity: 0.9;
+    pointer-events: none;
 }
 
 .chart-vignette {
-  position: fixed;
-  inset: 0;
-  z-index: -1;
-  pointer-events: none;
-  background:
-    radial-gradient(ellipse at center, transparent 55%, rgba(22,48,65,0.14) 100%),
-    linear-gradient(transparent 90%, rgba(14,58,77,0.18));
+    position: fixed;
+    inset: 0;
+
+    z-index: -1;
+    pointer-events: none;
+
+    background:
+        radial-gradient(
+            ellipse at center,
+            transparent 35%,
+            rgba(244, 239, 227, 0.12) 100%
+        ),
+        linear-gradient(
+            to bottom,
+            rgba(244, 239, 227, 0.08),
+            transparent 25%,
+            transparent 75%,
+            rgba(244, 239, 227, 0.3)
+        );
 }
 
-section {
-    margin-bottom: 40px;
+
+/* ---------- 3. DEPTH SOUNDINGS ---------- */
+
+/*
+   JavaScript creates .soundings and inserts numbered spans.
+   The numbers should remain visible without blocking clicks.
+*/
+
+.soundings {
+    position: fixed;
+    inset: 0;
+
+    z-index: -1;
+    overflow: hidden;
+    pointer-events: none;
+
+    color: rgba(22, 48, 65, 0.32);
+    font-family: Georgia, "Times New Roman", serif;
+    font-style: italic;
+    font-size: 15px;
+    letter-spacing: 0.03em;
 }
+
+.soundings span {
+    position: absolute;
+    display: block;
+
+    white-space: nowrap;
+    user-select: none;
+
+    text-shadow: 0 0 2px rgba(244, 239, 227, 0.45);
+}
+
+
+/* ---------- 4. HEADER AND INK-DRAWING TITLE ---------- */
+
+header {
+    position: relative;
+    z-index: 1;
+
+    margin: 0 0 34px;
+    padding: 28px 24px 24px;
+
+    text-align: center;
+
+    background: rgba(251, 248, 240, 0.91);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+
+    box-shadow:
+        0 8px 24px var(--shadow),
+        inset 0 0 0 4px rgba(185, 154, 100, 0.10);
+
+    overflow: hidden;
+}
+
+/* Decorative inner border */
+header::before {
+    content: "";
+    position: absolute;
+    inset: 9px;
+
+    border: 1px dashed rgba(185, 154, 100, 0.7);
+    border-radius: 7px;
+
+    pointer-events: none;
+}
+
+/* Rope-like lower trim */
+header::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+
+    height: 5px;
+
+    background: repeating-linear-gradient(
+        135deg,
+        var(--rope) 0,
+        var(--rope) 3px,
+        transparent 3px,
+        transparent 7px
+    );
+
+    opacity: 0.8;
+    pointer-events: none;
+}
+
+.header-text {
+    position: relative;
+    z-index: 1;
+}
+
+header h1 {
+    margin: 0 0 10px;
+
+    color: var(--ink);
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: clamp(2rem, 5vw, 3.2rem);
+    font-weight: 700;
+    line-height: 1.2;
+    letter-spacing: 0.025em;
+}
+
+.header-text h1 .ink-letter,
+header h1 .ink-letter {
+    display: inline-block;
+    opacity: 0;
+    transform: translateY(5px);
+
+    animation: ink-in 0.45s ease-out forwards;
+}
+
+@keyframes ink-in {
+    from {
+        opacity: 0;
+        transform: translateY(5px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+header p {
+    margin: 8px auto 0;
+    max-width: 700px;
+
+    color: var(--ink-light);
+    font-size: 1rem;
+}
+
+
+/* ---------- 5. NAVIGATION ---------- */
+
+nav {
+    position: sticky;
+    top: 10px;
+    z-index: 10;
+
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+
+    margin: 0 0 34px;
+    padding: 10px;
+
+    background: rgba(244, 239, 227, 0.94);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+
+    box-shadow: 0 4px 14px rgba(17, 39, 52, 0.08);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+}
+
+nav a {
+    display: inline-block;
+
+    padding: 8px 17px;
+
+    color: var(--ink);
+    font-weight: 700;
+    text-decoration: none;
+
+    border: 1px solid transparent;
+    border-radius: 6px;
+
+    transition:
+        color 0.2s ease,
+        background-color 0.2s ease,
+        border-color 0.2s ease,
+        transform 0.2s ease;
+}
+
+nav a:hover,
+nav a:focus-visible {
+    color: var(--parchment-light);
+    background: var(--sea);
+    border-color: var(--sea);
+    transform: translateY(-1px);
+    outline: none;
+}
+
+nav a.active,
+nav a[aria-current="page"] {
+    color: var(--parchment-light);
+    background: var(--ink);
+    border-color: var(--ink);
+}
+
+
+/* ---------- 6. PROFILE PHOTO ---------- */
+
 .profile-photo {
+    display: block;
+
     width: 150px !important;
     height: 150px !important;
+    max-width: 100%;
+
+    margin: 16px auto 22px;
+
     object-fit: cover;
+    object-position: center;
+
+    border: 4px solid var(--parchment-light);
     border-radius: 50%;
+    outline: 2px solid var(--rope);
+
+    box-shadow: 0 5px 16px var(--shadow);
+
+    transition:
+        transform 0.25s ease,
+        box-shadow 0.25s ease;
 }
 
-/* tide footer */
+.profile-photo:hover {
+    transform: scale(1.035);
+    box-shadow: 0 8px 22px rgba(17, 39, 52, 0.18);
+}
+
+
+/* ---------- 7. OPTIONAL INTRODUCTION / HERO ---------- */
+
+/*
+   These rules style a regular .voyage-hero if your HTML has one.
+   They do not create a sailing simulator.
+*/
+
+.voyage-hero {
+    position: relative;
+    margin: 0 0 36px;
+    padding: 30px;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(216, 232, 232, 0.9),
+            rgba(251, 248, 240, 0.96)
+        );
+
+    border: 1px solid var(--border);
+    border-left: 5px solid var(--sea);
+    border-radius: var(--radius);
+
+    box-shadow: 0 5px 18px var(--shadow);
+}
+
+.voyage-hero .hero-copy {
+    position: relative;
+    z-index: 1;
+    max-width: 760px;
+}
+
+.voyage-hero .hero-kicker {
+    margin: 0 0 8px;
+
+    color: var(--sea);
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+}
+
+.voyage-hero h2 {
+    margin: 0 0 14px;
+    padding: 0;
+
+    color: var(--ink);
+    font-size: clamp(1.6rem, 4vw, 2.3rem);
+    line-height: 1.25;
+
+    border: 0;
+}
+
+.voyage-hero h2::after {
+    display: none;
+}
+
+.voyage-hero p {
+    margin: 0 0 12px;
+    max-width: 70ch;
+}
+
+.voyage-hero p:last-child {
+    margin-bottom: 0;
+}
+
+
+/* ---------- 8. MAIN CONTENT SECTIONS ---------- */
+
+section {
+    position: relative;
+    margin: 0 0 32px;
+    padding: 25px 28px;
+
+    background: rgba(251, 248, 240, 0.91);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+
+    box-shadow: 0 5px 18px var(--shadow);
+
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
+}
+
+/* Small nautical marker in the upper-right corner */
+section::before {
+    content: "✦";
+    position: absolute;
+    top: 12px;
+    right: 16px;
+
+    color: rgba(185, 154, 100, 0.8);
+    font-size: 1rem;
+
+    pointer-events: none;
+}
+
+section h2 {
+    position: relative;
+
+    margin: 0 0 22px;
+    padding: 0 0 12px;
+
+    color: var(--ink);
+    font-size: clamp(1.45rem, 3vw, 1.9rem);
+    line-height: 1.3;
+
+    border-bottom: 1px solid rgba(22, 48, 65, 0.13);
+}
+
+section h2::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -1px;
+
+    width: 75px;
+    height: 3px;
+
+    background: var(--sea);
+    border-radius: 2px;
+}
+
+section h3 {
+    margin: 24px 0 8px;
+
+    color: var(--sea);
+    font-size: 1.2rem;
+}
+
+section p {
+    margin: 0 0 16px;
+}
+
+section p:last-child {
+    margin-bottom: 0;
+}
+
+section ul,
+section ol {
+    padding-left: 25px;
+}
+
+section li {
+    margin-bottom: 7px;
+}
+
+section li::marker {
+    color: var(--sea);
+}
+
+section a {
+    font-weight: 600;
+}
+
+section a:focus-visible,
+section a:hover {
+    text-decoration-thickness: 2px;
+}
+
+
+/* ---------- 9. OPTIONAL SCROLL REVEAL ---------- */
+
+/*
+   Compatible with JavaScript that adds data-reveal and .visible.
+   If your JavaScript does not use these attributes, these rules
+   have no effect.
+*/
+
+[data-reveal] {
+    opacity: 0;
+    transform: translateY(14px);
+
+    transition:
+        opacity 0.65s ease,
+        transform 0.65s ease;
+}
+
+[data-reveal].visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+
+/* ---------- 10. FOOTER ---------- */
+
 .tide-footer {
-  margin: 10px -20px 0;
-  position: relative;
-  background: var(--sea-deep);
-  color: #e8f1f2;
-  border-top: 2px solid var(--ink);
-  padding: 18px 20px 26px;
-  text-align: center;
-  font-size: 0.9rem;
-  overflow: hidden;
+    position: relative;
+    z-index: 1;
+
+    margin: 48px 0 0;
+    padding: 22px 10px 8px;
+
+    color: var(--ink-light);
+    font-size: 0.88rem;
+    text-align: center;
 }
+
+.tide-footer > div:last-child {
+    padding-top: 8px;
+}
+
+.tide-footer strong {
+    color: var(--ink);
+}
+
+/* Moving chart-wave line above the footer text */
 .tide-footer .tide-line {
-  position: absolute;
-  top: -1px; left: -20%;
-  width: 140%; height: 18px;
-  background-image: radial-gradient(circle at 10px 0, var(--sea-deep) 11px, transparent 12px);
-  background-size: 28px 18px;
-  background-repeat: repeat-x;
-  transform: translateX(0);
-  animation: wave-slide 9s linear infinite;
+    position: relative;
+    width: 100%;
+    height: 14px;
+    margin: 0 auto 12px;
+
+    overflow: hidden;
+
+    background-image: repeating-linear-gradient(
+        90deg,
+        transparent 0,
+        transparent 8px,
+        rgba(21, 94, 117, 0.03) 8px,
+        rgba(21, 94, 117, 0.03) 16px
+    );
+
+    border-top: 2px solid rgba(21, 94, 117, 0.4);
+    border-radius: 50% 50% 0 0;
+
+    animation: wave-slide 9s linear infinite;
 }
-.tide-footer a { color: #ffe9a8; }
+
+.tide-footer .tide-line::before {
+    content: "";
+    position: absolute;
+    inset: -5px 0 0;
+
+    background: repeating-linear-gradient(
+        90deg,
+        transparent 0,
+        transparent 19px,
+        rgba(21, 94, 117, 0.45) 19px,
+        rgba(21, 94, 117, 0.45) 21px,
+        transparent 21px,
+        transparent 40px
+    );
+
+    border-top: 1px solid rgba(21, 94, 117, 0.22);
+}
+
+@keyframes wave-slide {
+    from {
+        transform: translateX(0);
+    }
+
+    to {
+        transform: translateX(210px);
+    }
+}
+
+
+/* ---------- 11. RESPONSIVE LAYOUT ---------- */
+
+@media (max-width: 640px) {
+    body {
+        padding: 16px 12px 28px;
+        font-size: 15px;
+    }
+
+    header {
+        margin-bottom: 24px;
+        padding: 24px 15px 20px;
+    }
+
+    header::before {
+        inset: 7px;
+    }
+
+    header h1 {
+        font-size: clamp(1.8rem, 8vw, 2.5rem);
+    }
+
+    nav {
+        top: 5px;
+        gap: 5px;
+        margin-bottom: 24px;
+        padding: 7px;
+    }
+
+    nav a {
+        padding: 7px 11px;
+        font-size: 0.92rem;
+    }
+
+    section {
+        margin-bottom: 22px;
+        padding: 20px 18px;
+    }
+
+    .voyage-hero {
+        margin-bottom: 24px;
+        padding: 22px 19px;
+    }
+
+    .voyage-hero p {
+        font-size: 0.96rem;
+    }
+
+    .profile-photo {
+        width: 130px !important;
+        height: 130px !important;
+    }
+
+    .soundings {
+        font-size: 13px;
+    }
+
+    .tide-footer {
+        margin-top: 32px;
+        font-size: 0.82rem;
+    }
+}
+
+
+/* ---------- 12. ACCESSIBILITY: REDUCED MOTION ---------- */
+
+/*
+   The JavaScript already stops repeatedly animating the sea when
+   reduced motion is enabled. Keep the canvas visible for a static
+   chart rather than hiding it entirely.
+*/
+
+@media (prefers-reduced-motion: reduce) {
+    html {
+        scroll-behavior: auto;
+    }
+
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+
+    [data-reveal] {
+        opacity: 1;
+        transform: none;
+    }
+
+    .header-text h1 .ink-letter,
+    header h1 .ink-letter {
+        opacity: 1;
+        transform: none;
+    }
+}
