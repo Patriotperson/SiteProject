@@ -345,6 +345,7 @@ nav a::before {
     font-size: 0.85em;
     color: var(--gold);
     transition: transform 0.3s ease, color 0.3s ease;
+}
 /*Hover and Keyboard focus */
 nav a:hover,
 nav a:focus-visible {
