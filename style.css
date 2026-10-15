@@ -311,33 +311,59 @@ nav {
 }
 
 nav a {
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
 
     padding: 8px 17px;
 
     color: var(--ink);
     font-weight: 700;
+    font-size: 0.92rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
     text-decoration: none;
 
-    border: 1px solid transparent;
-    border-radius: 6px;
+    border: 1px solid var(--ink);
+    border-radius: 6px; /* Keep the current rectangular shape */
+    background: var(--parchment-light);
+
+    position: relative;
+    box-shadow: 2px 2px 0 rgba(22, 48, 65, 0.9);
 
     transition:
-        color 0.2s ease,
-        background-color 0.2s ease,
-        border-color 0.2s ease,
-        transform 0.2s ease;
+        color 0.22s ease,
+        background-color 0.22s ease,
+        border-color 0.22s ease,
+        transform 0.22s ease,
+        box-shadow 0.22s ease;
 }
 
+/* Gold nautical star */
+nav a::before {
+    content: "✧";
+    font-size: 0.85em;
+    color: var(--gold);
+    transition: transform 0.3s ease, color 0.3s ease;
+/*Hover and Keyboard focus */
 nav a:hover,
 nav a:focus-visible {
     color: var(--parchment-light);
     background: var(--sea);
     border-color: var(--sea);
-    transform: translateY(-1px);
+    transform: translateY(-2px) rotate(-0.5deg); 
+    box-shadow: 3px 5px 0 rgba(22, 48, 65, 0.9);
+   
     outline: none;
 }
+   
+nav a:hover::before,
+nav a:focus-visible::before {
+    transform: rotate(90deg) scale(1.25);
+    color: var(--parchment-light);
+}
 
+/* Current Page */
 nav a.active,
 nav a[aria-current="page"] {
     color: var(--parchment-light);
