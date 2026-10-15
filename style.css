@@ -123,7 +123,7 @@ select {
     height: 100vh;
 
     z-index: -2;
-    opacity: 0.9;
+    opacity: 2;
     pointer-events: none;
 }
 
